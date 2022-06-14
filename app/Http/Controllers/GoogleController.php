@@ -44,7 +44,7 @@ class GoogleController extends Controller
                     'name' => $user->name,
                     'email' => $user->email,
                     'google_id'=> $user->id,
-                    'password' => bryct('123456')
+                    'password' => bcrypt('123456')
                 ]);
       
                 Auth::login($newUser);

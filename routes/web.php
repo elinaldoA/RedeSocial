@@ -17,3 +17,7 @@ use App\Http\Controllers\GoogleController;
   
 Route::get('auth/google', 'App\Http\Controllers\GoogleController@redirectToGoogle');
 Route::get('auth/google/callback', 'App\Http\Controllers\GoogleController@handleGoogleCallback');
+
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
