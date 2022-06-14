@@ -1,10 +1,6 @@
 <?php
-  
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-  
-use App\Http\Controllers\API\RegisterController;
-use App\Http\Controllers\API\ProductController;
+  use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Route;
   
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +14,19 @@ use App\Http\Controllers\API\ProductController;
 */
   
   
-Route::controller(RegisterController::class)->group(function(){
+/*Route::controller(RegisterController::class)->group(function(){
     Route::post('register', 'register');
     Route::post('login', 'login');
+});*/
+
+Route::group(['middleware' => 'api','prefix' => 'auth'
+], 
+function ($router) {
+    Route::post('/login', 'App\Http\Controllers\AuthController@login');
+    Route::post('/register', 'App\Http\Controllers\AuthController@register');
+    Route::post('/logout', 'App\Http\Controllers\AuthController@logout');
+    Route::post('/refresh', 'App\Http\Controllers\AuthController@refresh');
+    Route::get('/user-profile', 'App\Http\Controllers\AuthController@userProfile');    
 });
+
+
