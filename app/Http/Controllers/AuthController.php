@@ -65,7 +65,7 @@ class AuthController extends Controller
      */
     public function logout() {
         auth()->logout();
-        return response()->json(['message' => 'Usuário deslogado com sucesso!']);
+        return response()->json(['message' => 'Usuário deslogado com sucesso!'], 200);
     }
     /**
      * Refresh a token.

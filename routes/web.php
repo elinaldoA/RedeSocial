@@ -21,3 +21,7 @@ Route::get('auth/google/callback', 'App\Http\Controllers\GoogleController@handle
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::get('/', function () {
+    return view('welcome');
+});

@@ -29,4 +29,15 @@ function ($router) {
     Route::get('/user-profile', 'App\Http\Controllers\AuthController@userProfile');    
 });
 
+Route::group(['middleware' => 'api', 'prefix' => 'postagens'
+],
+function($posts)
+{
+  Route::get('/homeapp', 'App\Http\Controllers\PostagensController@index');
+  Route::get('/visualizar/{id}', 'App\Http\Controllers\PostagensController@show');
+  Route::post('/postar', 'App\Http\Controllers\PostagensController@store');
+  Route::put('/postar/{id}', 'App\Http\Controllers\PostagensController@update');
+  Route::delete('/postar/{id}', 'App\Http\Controllers\PostagensController@destroy');
+});
+
 
