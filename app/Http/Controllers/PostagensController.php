@@ -8,66 +8,71 @@ use App\Http\Resources\Postagens as PostagensResource;
 
 class PostagensController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function getAllPostagens()
     {
-        $postagens = Postagens::paginate(15);
-        return PostagensResource::collection($postagens);
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        $postagens = Postagens::create($request->all());
-        return response()->json($postagens, 201);
+        $postagens = Postagens::get()->toJson(JSON_PRETTY_PRINT);
+        return response($postagens, 200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function createPostagens(Request $request)
     {
-        $postagens = Postagens::findOrFail($id);
-        return Postagens::find($postagens);
+        $postagem = new Postagens;
+        $postagem->titulo = $request->titulo;
+        $postagem->local = $request->local;
+        $postagem->imagem = $request->imagem;
+        $postagem->descricao = $request->descricao;
+        $postagem->save();
+
+        return response()->json([
+            "message" => "Postagem criada com sucesso!"
+        ], 201);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function getPostagens($id)
     {
-        $postagens = Postagens::findOrFail($id);
-        $postagens->update($request->all());
-
-        return $postagens;
+        if(Postagens::where('id', $id)->exists()){
+            $postagem = Postagens::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
+            return response($postagem, 200);
+        }else{
+            return response([
+                "message" => "Postagem não encontrada!"
+            ], 404);
+        }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function updatePostagens(Request $request, $id)
     {
-        $postagem = Postagens::findOrFail($id);
-        $postagem->delete();
+        if(Postagens::where('id', $id)->exists()){
+            $postagem = Postagens::find($id);
+            $postagem->titulo = is_null($request->titulo) ? $postagem->titulo : $request->titulo;
+            $postagem->local = is_null($request->local) ? $postagem->local : $request->local;
+            $postagem->imagem = is_null($request->imagem) ? $postagem->imagem : $request->imagem;
+            $postagem->descricao = is_null($request->descricao) ? $postagem->descricao : $request->descricao;
+            $postagem->save();
 
-        return 204;
+            return response()->json([
+                "message" => "Postagem atualizada com sucesso!"
+            ], 200);
+        }else{
+            return response()->json([
+                "message" => "Postagem não encontrada!"
+            ], 404);
+        }
+    }
+
+    public function deletePostagens($id)
+    {
+        if(Postagens::where('id', $id)->exists()){
+            $postagem = Postagens::find($id);
+            $postagem->delete();
+
+            return response()->json([
+                "message" => "Postagem excluída com sucesso!"
+            ], 202);
+        }else{
+            return response([
+                "message" => "Postagem não encontrada"
+            ], 404);
+        }
     }
 }
