@@ -162,7 +162,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
-
+        Vyuldashev\LaravelOpenApi\OpenApiServiceProvider::class,
         /*
          * Package Service Providers...
          */

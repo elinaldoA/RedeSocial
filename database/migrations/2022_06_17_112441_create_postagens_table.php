@@ -14,7 +14,8 @@ class CreatePostagensTable extends Migration
     public function up()
     {
         Schema::create('postagens', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigIncrements('postagens_id');
+            $table->unsignedInteger('user_id');
             $table->string('titulo');
             $table->date('data');
             $table->string('local');

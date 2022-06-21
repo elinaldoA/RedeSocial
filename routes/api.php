@@ -31,15 +31,15 @@ function ($router) {
     Route::get('/user-profile', 'App\Http\Controllers\AuthController@userProfile');    
 });
 
-Route::group(['middleware' => 'api', 'prefix' => 'postagens'
+Route::group(['middleware' => 'api', 'prefix' => 'auth'
 ],
 function($posts)
 {
-  Route::get('/homeapp', 'App\Http\Controllers\PostagensController@getAllPostagens');
-  Route::get('/view/{id}', 'App\Http\Controllers\PostagensController@getPostagens');
-  Route::post('/create', 'App\Http\Controllers\PostagensController@createPostagens');
-  Route::put('/update/{id}', 'App\Http\Controllers\PostagensController@updatePostagens');
-  Route::delete('/delete/{id}', 'App\Http\Controllers\PostagensController@deletePostagens');
+  Route::get('/homeapp', 'App\Http\Controllers\PostagensController@index');
+  Route::get('postagem/view/{id}', 'App\Http\Controllers\PostagensController@show');
+  Route::post('postagem/create', 'App\Http\Controllers\PostagensController@store');
+  Route::put('postagem/update/{id}', 'App\Http\Controllers\PostagensController@update');
+  Route::delete('postagem/delete/{id}', 'App\Http\Controllers\PostagensController@delete');
 });
 
 

@@ -8,9 +8,12 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 /**
- * @OA\Info(
- *    title="Your super  ApplicationAPI",
- *    version="1.0.0",
+ * @SWG\Swagger(
+ *   basePath="/api",
+ *   @SWG\Info(
+ *     title="Core API",
+ *     version="1.0.0"
+ *   )
  * )
  */
 class Controller extends BaseController

@@ -2,45 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\PostagemResource;
 use App\Models\Postagens;
 use Illuminate\Http\Request;
-use App\Http\Resources\Postagens as PostagensResource;
 
 class PostagensController extends Controller
 {
-    public function getAllPostagens()
+    public function __construct()
     {
-        $postagens = Postagens::get()->toJson(JSON_PRETTY_PRINT);
-        return response($postagens, 200);
+        $this->middleware('auth:api')->except(['index', 'show']);
+    }
+    public function index()
+    {
+        return PostagemResource::collection(Postagens::all());
+    }
+    public function store(Request $request)
+    {
+        $postagens = Postagens::create(
+        [
+            'user_id' => auth()->user()->id,
+            'titulo' => $request->titulo,
+            'local' => $request->local,
+            'imagem' => $request->imagem,
+            'descricao' => $request->descricao
+        ]);
+
+        return new PostagemResource($postagens);
+    }
+    public function show($id)
+    {
+        return new PostagemResource(Postagens::FindOrFail($id));
     }
 
-    public function createPostagens(Request $request)
-    {
-        $postagem = new Postagens;
-        $postagem->titulo = $request->titulo;
-        $postagem->local = $request->local;
-        $postagem->imagem = $request->imagem;
-        $postagem->descricao = $request->descricao;
-        $postagem->save();
-
-        return response()->json([
-            "message" => "Postagem criada com sucesso!"
-        ], 201);
-    }
-
-    public function getPostagens($id)
-    {
-        if(Postagens::where('id', $id)->exists()){
-            $postagem = Postagens::where('id', $id)->get()->toJson(JSON_PRETTY_PRINT);
-            return response($postagem, 200);
-        }else{
-            return response([
-                "message" => "Postagem não encontrada!"
-            ], 404);
-        }
-    }
-
-    public function updatePostagens(Request $request, $id)
+    public function update(Request $request, $id)
     {
         if(Postagens::where('id', $id)->exists()){
             $postagem = Postagens::find($id);
@@ -51,16 +45,19 @@ class PostagensController extends Controller
             $postagem->save();
 
             return response()->json([
-                "message" => "Postagem atualizada com sucesso!"
+                'code'=> "200",
+                'success'=>true,
+                'message' => 'Postagem atualizada com sucesso'
             ], 200);
         }else{
             return response()->json([
-                "message" => "Postagem não encontrada!"
-            ], 404);
+                'code'=>404,
+                "success"=> false,
+                'message' => 'Postagem não encontrada!'
+            ],404);
         }
     }
-
-    public function deletePostagens($id)
+    public function delete($id)
     {
         if(Postagens::where('id', $id)->exists()){
             $postagem = Postagens::find($id);
@@ -70,9 +67,7 @@ class PostagensController extends Controller
                 "message" => "Postagem excluída com sucesso!"
             ], 202);
         }else{
-            return response([
-                "message" => "Postagem não encontrada"
-            ], 404);
+            return abort(404, 'Not Found');
         }
     }
 }
