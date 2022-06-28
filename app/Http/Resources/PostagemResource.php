@@ -16,12 +16,12 @@ class PostagemResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'titulo' => $this->titulo,
-            'local' => $this->local,
-            'imagem' => $this->imagem,
-            'descricao' => $this->descricao,
-            'created_at' => (string)$this->created_at,
-            'updated_at' => (string)$this->updated_at,
+            'title' => $this->title,
+            'place' => $this->place,
+            'image' => $this->image,
+            'description' => $this->description,
+            'created_at' => $this->created_at->format('d/m/Y'),
+            'updated_at' => $this->updated_at->format('d/m/Y'),
             'user' => $this->user
         ];
     }

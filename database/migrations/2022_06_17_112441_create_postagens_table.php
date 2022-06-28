@@ -14,13 +14,12 @@ class CreatePostagensTable extends Migration
     public function up()
     {
         Schema::create('postagens', function (Blueprint $table) {
-            $table->bigIncrements('postagens_id');
+            $table->bigIncrements('id');
             $table->unsignedInteger('user_id');
-            $table->string('titulo');
-            $table->date('data');
-            $table->string('local');
-            $table->string('imagem');
-            $table->string('descricao');
+            $table->string('title');
+            $table->string('place');
+            $table->string('image');
+            $table->string('description');
             $table->timestamps();
         });
     }

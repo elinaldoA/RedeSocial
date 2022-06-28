@@ -3,15 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Auth\Events\PasswordReset;
-//use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\BaseController as BaseController;
 
-class AuthController extends Controller
+class AuthController extends BaseController
 {
     /**
      * Create a new AuthController instance.
@@ -36,16 +34,14 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed|min:6'
         ]);
         if ($validator->fails()) {
-            return response()->json($validator->errors()->toJson(), 400);
+            return $this->sendError('Validation Error.', $validator->errors());
         }
-        $user = User::create(array_merge(
+        $success = User::create(array_merge(
             $validator->validated(),
             ['password' => bcrypt($request->password)]
         ));
-        return response()->json([
-            'message' => 'Usuário registrado com sucesso!',
-            'user' => $user
-        ], 201);
+
+        return $this->sendResponse($success, 'User register successfully.');
     }
     /**
      * Get a JWT via given credentials.
@@ -64,7 +60,8 @@ class AuthController extends Controller
         if (!$token = auth()->attempt($validator->validated())) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        return $this->createNewToken($token);
+            return $this->createNewToken($token);
+     // return $this->sendResponse($success, 'User login successfully.');
     }
     public function sendResetLink(Request $request)
     {
@@ -75,7 +72,7 @@ class AuthController extends Controller
         ]);
 
         if($validator->fails()){
-            return response(['erros'=>$validator->errors()->all()], 4222);
+            return response(['erros'=>$validator->errors()->all()], 422);
         }
 
         $response = Password::sendResetLink($input);
@@ -100,11 +97,8 @@ class AuthController extends Controller
         );
 
         $validator = Validator::make($input, [
-
-            'token' => 'required',
-
-            'email' => 'required',
-
+            'token' => 'required|string',
+            'email' => 'required|email',
             'password' => 'required|min:6',
         ]);
 

@@ -29,8 +29,9 @@ class User extends Authenticatable implements JWTSubject
         'email',
         'password',
         'password_confirmation',
-        'nascimento',
-        'contato',
+        'birth',
+        'contact',
+        'genre',
         'google_id'
     ];
   

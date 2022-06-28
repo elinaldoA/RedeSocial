@@ -16,4 +16,11 @@ class Users extends ResourceCollection
     {
         return parent::toArray($request);
     }
+    public function with($request)
+    {
+        return [
+                'statusCode' => '200',
+                'message' => 'success'
+            ];
+    }
 }

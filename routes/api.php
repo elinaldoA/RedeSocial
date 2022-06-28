@@ -28,7 +28,7 @@ function ($router) {
     Route::post('password/forgot-password','App\Http\Controllers\AuthController@sendResetLink');
     Route::post('/logout', 'App\Http\Controllers\AuthController@logout');
     Route::post('/refresh', 'App\Http\Controllers\AuthController@refresh');
-    Route::get('/user-profile', 'App\Http\Controllers\AuthController@userProfile');    
+    Route::get('/userProfile', 'App\Http\Controllers\AuthController@userProfile');    
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'

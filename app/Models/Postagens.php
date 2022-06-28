@@ -10,7 +10,7 @@ class Postagens extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id','titulo','data','local','imagem','descricao'
+        'user_id','title','place','image','description'
     ];
     public function user()
     {
